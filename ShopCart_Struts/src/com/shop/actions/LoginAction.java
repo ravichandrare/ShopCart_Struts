@@ -11,12 +11,16 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
 import com.shop.forms.LoginForm;
+import com.shop.forms.ProductForm;
 import com.shop.services.LoginValidation;
+import com.shop.services.ProductTable;
 
 public class LoginAction extends Action {
 
 	private final static String SUCCESS = "success";
 	private final static String FAILURE = "failure";
+	ProductTable pt;
+	ArrayList<ProductForm> products=new ArrayList<ProductForm>();
 
 	@Override
 	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request,
@@ -30,7 +34,9 @@ public class LoginAction extends Action {
 		boolean b = lv.authenticate(username, password);
 
 		if (b) {
-
+			pt=new ProductTable();
+			products=(ArrayList)pt.getproducts();
+			request.setAttribute("productlist", products);
 			return mapping.findForward(SUCCESS);
 		} else {
 			return mapping.findForward(FAILURE);
